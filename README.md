@@ -1,8 +1,6 @@
 # devops-project
 Create a Vagrantfile which provisions a VM
 
-TODO: Maybe the project could be to give them a VM, and they tell us all the things wrong with it.
-
 # Introduction
 Hi, thanks for your interest in our Devops Engineering position. As part of the interview process, we'd like you to setup a simple web application and database.
 
