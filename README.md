@@ -55,3 +55,37 @@ Hi, thanks for your interest in our Devops Engineering position. As part of the 
 Feel free to reach out to us for clarifications.
 
 Thanks and good luck!
+
+
+# How to run the Webapp Locally
+## Requirements
+Install following in your Local machine
+
+VirtualBox http://www.virtualbox.org<br/>
+Vagrant http://www.vagrantup.com<br/>
+Git https://git-scm.com<br/>
+## Setup
+```git clone https://github.com/praveengraton/devops-project.git```<br/>
+To install and run the webapp ```cd devops-project``` and  type ```make``` or ```vagrant up```
+### App:
+Access Webapp on: http://localhost:8001<br/>
+Access Phpinfo page on: http://localhost:8001/phpinfo.php<br/>
+
+WebApp will allow you to<br/>
+    - Add a New User<br/>
+    - View all User data<br/>
+vagrant ssh<br/>
+MySQL DB can be accessed over the port 3001 on localhost<br/>
+### Monitoring the application
+The webapp's successful and un-successful requests are collected and stored to Redis and the Host metrics are collected using Node-exporter <br/>
+Used Prometheus to scrape metrics from both the endpoits(Redis and Node-exporter)<br/>
+Created metric dashboards in grafana using prometheus as a datasource.<br/>
+### Grafana:
+Access Grafana Host Dashboard on: http://localhost:3000/<br/>
+```Username: admin```<br/>
+```Password: admin``` (Note: Please skip the pasword reset option)<br/>
+
+Once you login navigate to Home->Host Stats(dashboard) which have app metrics and Host metrics
+![](Grafana.png)
+### Prometheus:
+Aceess Prometheus service on : http://localhost:9090/ --> You can see all the metrics collected from the redis and nodeexporter endpoints

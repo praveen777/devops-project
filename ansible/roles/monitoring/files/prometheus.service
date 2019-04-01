@@ -1,0 +1,12 @@
+[Unit]
+Description=Prometheus Monitoring
+After=network.target
+
+[Service]
+ExecStart=/usr/sbin/prometheus --config.file="/etc/prometheus/prometheus.yml"
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+
+[Install]
+WantedBy=multi-user.target

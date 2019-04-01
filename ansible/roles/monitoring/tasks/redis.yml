@@ -1,0 +1,13 @@
+- name: Install redis server package
+  package: name=redis-server state=installed
+
+- name: Install php-redis package
+  package: name=php-redis state=installed
+
+- name: Copy metrics files to html
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'metrics.php', dest: '/var/www/html' }
+
+- name: Make sure apache2 starts at boot
+  service: name=apache2 state=started enabled=yes

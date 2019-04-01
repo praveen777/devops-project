@@ -1,0 +1,10 @@
+- name: Delete default index.html page
+  file: path=/var/www/html/index.html state=absent
+
+- name: Copy webapp files to html
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'list.php', dest: '/var/www/html' }
+    - { src: 'index.php', dest: '/var/www/html' }
+    - { src: 'style.css', dest: '/var/www/html' }
+    - { src: 'phpinfo.php', dest: '/var/www/html' }

@@ -1,0 +1,32 @@
+---
+- name: Install mysql package
+  package: name=mysql-server state=installed
+
+- name: Make sure mysqld is running and starts at boot
+  service: name=mysql state=started enabled=yes
+
+- name: Create my.cnf file from template
+  template: dest=/etc/mysql/my.cnf src=my.cnf.j2
+  notify:
+    - reload mysql
+
+- name: Install python Mysql package #required for mysql_db tasks
+  package: name=python-mysqldb state=present
+
+- name: Create a new database
+  mysql_db: name={{mysql_db_name}} state=present collation=utf8_general_ci
+
+- name: Create a database user
+  mysql_user: name={{ mysql_user}} password={{ mysql_password }} priv=*.*:ALL host=localhost state=present
+
+- name: Import users.sql
+  copy: src=users.sql dest=/tmp/users.sql
+
+- name: Create table 'Users'
+  mysql_db: name=test state=import  target=/tmp/users.sql
+
+- name: Copy server files to html
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'server.php', dest: '/var/www/html' }
+

@@ -1,0 +1,4 @@
+---
+- include: redis.yml
+- include: prometheus.yml
+- include: grafana.yml

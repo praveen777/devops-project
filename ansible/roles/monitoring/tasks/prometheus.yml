@@ -1,0 +1,41 @@
+- name: Install prometehus package
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.8.0/prometheus-2.8.0.linux-amd64.tar.gz
+    dest: /tmp/prometheus-2.8.0.linux-amd64.tar.gz
+
+- name: Install prometheus-node-exporter package
+  package: name=prometheus-node-exporter state=installed
+
+- name: Extract prometheus into /tmp directory
+  unarchive:
+    remote_src: true
+    src: /tmp/prometheus-2.8.0.linux-amd64.tar.gz
+    dest: /tmp
+- name: create prometheus directory
+  file:
+    path: /etc/prometheus
+    state: directory
+
+- name: Copy prometheus binary
+  copy: src={{ item.src }} dest={{ item.dest }} remote_src=true mode={{ item.mode}}
+  with_items:
+    - { src: '/tmp/prometheus-2.8.0.linux-amd64/prometheus', dest: '/usr/sbin/prometheus', mode: '0755' }
+
+- name: Copy prometheus systemd service file
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'prometheus.service', dest: '/etc/systemd/system' }
+  notify:
+    - systemd daemon reload 
+    - restart prometheus
+
+- name: Copy prometheus config
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'prometheus.yml', dest: '/etc/prometheus' }
+  notify:
+    - restart prometheus
+
+- name: Make sure prometheus is running and starts at boot
+  service: name=prometheus state=started enabled=yes    
+

@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: yes
+  roles:
+    - { role: infra, apache_port: 80, mysql_port: 3306, mysql_db_name: test  , mysql_user: testdb ,mysql_password: testdb  }
+    - { role: app }
+    - { role: monitoring }

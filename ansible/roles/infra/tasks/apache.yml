@@ -1,0 +1,25 @@
+---
+
+- name: Install apache package
+  package: name=php7.0 state=installed
+
+- name: Install mod-php for apache2 package
+  package: name=libapache2-mod-php7.0 state=installed
+
+- name: Install apache package
+  package: name=php7.0-mysql state=installed
+
+- name: Install apache package
+  package: name=apache2 state=installed
+
+- name: Make sure apache2 starts at boot
+  service: name=apache2 state=started enabled=yes
+
+- name: Create 000-default.conf file from template
+  template: dest=/etc/apache2/sites-enabled/000-default.conf src=000-default.conf.j2
+  notify:
+    - reload apache2
+- name: Create port.conf file from template
+  template: dest=/etc/apache2/ports.conf src=ports.conf.j2
+  notify:
+    - reload apache2
